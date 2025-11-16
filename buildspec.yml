@@ -1,4 +1,5 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -6,18 +7,31 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm install
-      - chmod +x node_modules/.bin/vite   # ✅ Fix vite permission
+      - chmod +x node_modules/.bin/vite
+      - echo "Logging in to Amazon ECR..."
+      - aws --version
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 575012135500.dkr.ecr.ap-south-1.amazonaws.com
+
   build:
     commands:
       - echo "Building React (Vite) app..."
       - npm run build
+      - echo "Building Docker image..."
+      - docker build -t demo-dev-environment .
+      - docker tag demo-dev-environment:latest 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest
+
   post_build:
     commands:
-      - echo "✅ Build complete. Preparing for deployment."
+      - echo "Pushing Docker image to ECR..."
+      - docker push 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest
+      - echo "Creating imagedefinitions.json file..."
+      - printf '[{"name":"demo-react-nginx","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest"}]' > imagedefinitions.json
+      - cat imagedefinitions.json
+
 artifacts:
   files:
-    - '**/*'
-  base-directory: dist
+    - imagedefinitions.json
+
 cache:
   paths:
     - node_modules/**/*
