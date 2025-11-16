@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+      - chmod +x node_modules/.bin/vite   # ✅ Fix vite permission
+  build:
+    commands:
+      - echo "Building React (Vite) app..."
+      - npm run build
+  post_build:
+    commands:
+      - echo "✅ Build complete. Preparing for deployment."
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
+cache:
+  paths:
+    - node_modules/**/*
