@@ -1,0 +1,6 @@
+[
+  {
+    "name": "demo-react-nginx",
+    "imageUri": "575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest"
+  }
+]
