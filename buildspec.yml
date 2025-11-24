@@ -9,7 +9,6 @@ phases:
       - npm install
       - chmod +x node_modules/.bin/vite
       - echo "Logging in to Amazon ECR..."
-      - aws --version
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 575012135500.dkr.ecr.ap-south-1.amazonaws.com
 
   build:
@@ -28,8 +27,8 @@ phases:
       - echo "Pushing Docker image to ECR..."
       - docker push 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
 
-      - echo "Creating imagedefinitions.json file..."
-      - printf '[{"name":"demo-react-nginx","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
+      - echo "Creating imagedefinitions.json file for ECS..."
+      - printf '[{"name":"nginx","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
