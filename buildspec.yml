@@ -16,16 +16,20 @@ phases:
     commands:
       - echo "Building React (Vite) app..."
       - npm run build
+
       - echo "Building Docker image..."
-      - docker build -t demo-dev-environment .
-      - docker tag demo-dev-environment:latest 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest
+      - docker build -t demo-dev-frontend .
+
+      - echo "Tagging Docker image..."
+      - docker tag demo-dev-frontend:latest 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
 
   post_build:
     commands:
       - echo "Pushing Docker image to ECR..."
-      - docker push 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest
+      - docker push 575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest
+
       - echo "Creating imagedefinitions.json file..."
-      - printf '[{"name":"demo-react-nginx","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-environment:latest"}]' > imagedefinitions.json
+      - printf '[{"name":"demo-react-nginx","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
