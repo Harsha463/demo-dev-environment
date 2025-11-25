@@ -8,7 +8,6 @@ phases:
       - echo "Installing dependencies..."
       - npm install
       - chmod +x node_modules/.bin/vite
-
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 575012135500.dkr.ecr.ap-south-1.amazonaws.com
 
@@ -30,8 +29,6 @@ phases:
 
       - echo "Creating imagedefinitions.json for ECS..."
       - printf '[{"name":"frontend","imageUri":"575012135500.dkr.ecr.ap-south-1.amazonaws.com/demo-dev-frontend:latest"}]' > imagedefinitions.json
-
-      - echo "imagedefinitions.json content:"
       - cat imagedefinitions.json
 
 artifacts:
